@@ -21,7 +21,7 @@ public class Question {
 
     @Override
     public String toString() {
-        return  "Вопрос: " + question + " Ответ: " + answer ;
+        return  "Вопрос: " + question + "\n" + "Ответ: " + answer ;
     }
     @Override
     public boolean equals(Object other) {
