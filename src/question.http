@@ -1,2 +1,15 @@
 GET http://localhost:8080/exam/amount
 ###
+GET http://localhost:8080/exam/?amount=10
+###
+GET http://localhost:8080/exam/?amount=25
+###
+GET http://localhost:8080/exam/?amount=0
+###
+GET http://localhost:8080/exam/java
+###
+GET http://localhost:8080/exam/java/add
+###
+GET http://localhost:8080/exam/java/add?question=кто ты?&answer=я робот
+###
+GET http://localhost:8080/exam/java/remove?question=кто ты?&answer=я робот

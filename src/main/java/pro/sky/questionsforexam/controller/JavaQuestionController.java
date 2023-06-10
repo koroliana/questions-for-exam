@@ -34,7 +34,7 @@ public class JavaQuestionController {
         }
         else {
             Question newQuestion = questionService.add(question, answer);
-            return "Новый вопрос " + newQuestion + " добавлен";
+            return "Добавлен Новый \"" + newQuestion + "\"";
         }
     }
     @GetMapping (path = "/remove")
@@ -44,20 +44,20 @@ public class JavaQuestionController {
         }
         else {
             Question removableQuestion = questionService.remove(question, answer);
-            return "Вопрос "+ removableQuestion + " удален";
+            return "Удален \"" + removableQuestion + "\"";
         }
     }
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(QuestionNotFoundException.class)
     public String employeeNotFoundExceptionHandler(QuestionNotFoundException e) {
-        return "Вопрос "+ e.getQuestion()+" не найден";
+        return "Не найден \"" + e.getQuestion() + "\"";
     }
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(QuestionAlreadyAddedException.class)
     public String employeeAlreadyAddedExceptionHandler(QuestionAlreadyAddedException e) {
-        return "Вопрос "+ e.getQuestion()+" уже добавлен";
+        return "Уже добавлен \""+ e.getQuestion() + "\"";
     }
 
 

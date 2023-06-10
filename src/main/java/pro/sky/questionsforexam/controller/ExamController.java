@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import pro.sky.questionsforexam.exception.QuestionNumberExceededException;
 import pro.sky.questionsforexam.model.Question;
 import pro.sky.questionsforexam.service.ExaminerService;
-import pro.sky.questionsforexam.service.ExaminerServiceImpl;
 
 import java.util.Collection;
 
@@ -13,31 +12,31 @@ import java.util.Collection;
 @RequestMapping("")
 public class ExamController {
 
-    private final ExaminerService examinerService = new ExaminerServiceImpl();
+    private final ExaminerService examinerService;
 
-    /*
     public ExamController(ExaminerService examinerService) {
         this.examinerService = examinerService;
     }
 
-     */
-
-    private boolean isNull(Integer a){
-        return a == null;
+    private boolean isValid(Integer a){
+        return (a == null)||(a<=0);
     }
 
     @GetMapping()
     public String getQuestions(@RequestParam(required = false) Integer amount) {
-        if (isNull(amount)) {
+        if (isValid(amount)) {
             return "Введите требуемое количество вопросов в экзамене";
         }
         else {
             Collection<Question> examQuestions = examinerService.getQuestions(amount);
             StringBuilder examQuestionsString = new StringBuilder();
+            int counter = amount-1;
             for (Question question: examQuestions){
-                examQuestionsString.append("\n").append(question.toString());
+                int id = amount-counter;
+                examQuestionsString.append(" "+ id + ") ").append(question.toString());
+                counter--;
             }
-            return "Ваши вопросы к экзамену: \n" + "вот: \n" + examQuestionsString;
+            return "Ваши вопросы к экзамену: \n" + examQuestionsString;
         }
     }
 

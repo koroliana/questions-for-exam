@@ -1,19 +1,21 @@
 package pro.sky.questionsforexam.service;
 
+import org.springframework.stereotype.Service;
 import pro.sky.questionsforexam.exception.QuestionNumberExceededException;
 import pro.sky.questionsforexam.model.Question;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Service
 public class ExaminerServiceImpl implements ExaminerService{
-    private final JavaQuestionService javaQuestionService = new JavaQuestionService();
+    private final JavaQuestionService javaQuestionService;
 
-    /*
+
     public ExaminerServiceImpl(JavaQuestionService javaQuestionService) {
         this.javaQuestionService = javaQuestionService;
     }
-         */
+
     @Override
     public Collection<Question> getQuestions(int amount) {
         if(amount > javaQuestionService.getAll().size()) {
