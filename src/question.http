@@ -1,10 +1,10 @@
-GET http://localhost:8080/exam/amount
+GET http://localhost:8080/exam/get
 ###
-GET http://localhost:8080/exam/?amount=10
+GET http://localhost:8080/exam/get/10
 ###
-GET http://localhost:8080/exam/?amount=25
+GET http://localhost:8080/exam/get/25
 ###
-GET http://localhost:8080/exam/?amount=0
+GET http://localhost:8080/exam/get/0
 ###
 GET http://localhost:8080/exam/java
 ###

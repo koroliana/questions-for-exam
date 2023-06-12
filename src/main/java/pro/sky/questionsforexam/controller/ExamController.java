@@ -2,6 +2,7 @@ package pro.sky.questionsforexam.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import pro.sky.questionsforexam.exception.QuestionAmountInvalidException;
 import pro.sky.questionsforexam.exception.QuestionNumberExceededException;
 import pro.sky.questionsforexam.model.Question;
 import pro.sky.questionsforexam.service.ExaminerService;
@@ -9,7 +10,7 @@ import pro.sky.questionsforexam.service.ExaminerService;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/get")
 public class ExamController {
 
     private final ExaminerService examinerService;
@@ -22,21 +23,13 @@ public class ExamController {
         return (a == null)||(a<=0);
     }
 
-    @GetMapping()
-    public String getQuestions(@RequestParam(required = false) Integer amount) {
+    @GetMapping("/{amount}")
+    public Collection<Question> getQuestions(@PathVariable Integer amount) {
         if (isValid(amount)) {
-            return "Введите требуемое количество вопросов в экзамене";
+            throw new QuestionAmountInvalidException();
         }
         else {
-            Collection<Question> examQuestions = examinerService.getQuestions(amount);
-            StringBuilder examQuestionsString = new StringBuilder();
-            int counter = amount-1;
-            for (Question question: examQuestions){
-                int id = amount-counter;
-                examQuestionsString.append(" "+ id + ") ").append(question.toString());
-                counter--;
-            }
-            return "Ваши вопросы к экзамену: \n" + examQuestionsString;
+            return examinerService.getQuestions(amount);
         }
     }
 
@@ -44,5 +37,11 @@ public class ExamController {
     @ExceptionHandler(QuestionNumberExceededException.class)
     public String questionNumberExceededExceptionHandler(QuestionNumberExceededException e) {
         return "Запрошенное количество вопросов превышает доступный объем";
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(QuestionAmountInvalidException.class)
+    public String questionAmountInvalidExceptionHandler(QuestionAmountInvalidException e) {
+        return "Введите требуемое количество вопросов в экзамене";
     }
 }

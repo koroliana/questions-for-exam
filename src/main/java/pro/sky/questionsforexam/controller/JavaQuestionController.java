@@ -2,6 +2,7 @@ package pro.sky.questionsforexam.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import pro.sky.questionsforexam.exception.BlankQuestionOrAnswerException;
 import pro.sky.questionsforexam.exception.QuestionAlreadyAddedException;
 import pro.sky.questionsforexam.exception.QuestionNotFoundException;
 import pro.sky.questionsforexam.model.Question;
@@ -28,23 +29,21 @@ public class JavaQuestionController {
     }
 
     @GetMapping(path = "/add")
-    public String addQuestion(@RequestParam(required = false) String question, @RequestParam(required = false) String answer) {
+    public Question addQuestion(@RequestParam(required = false) String question, @RequestParam(required = false) String answer) {
         if (isNull(question, answer)) {
-            return "Добавьте вопрос и ответ";
+            throw new BlankQuestionOrAnswerException();
         }
         else {
-            Question newQuestion = questionService.add(question, answer);
-            return "Добавлен Новый \"" + newQuestion + "\"";
+            return questionService.add(question, answer);
         }
     }
     @GetMapping (path = "/remove")
-    public String removeQuestion(@RequestParam(required = false) String question, @RequestParam(required = false) String answer) {
+    public Question removeQuestion(@RequestParam(required = false) String question, @RequestParam(required = false) String answer) {
         if (isNull(question, answer)) {
-            return "Добавьте вопрос и ответ";
+            throw new BlankQuestionOrAnswerException();
         }
         else {
-            Question removableQuestion = questionService.remove(question, answer);
-            return "Удален \"" + removableQuestion + "\"";
+            return questionService.remove(question, answer);
         }
     }
 
@@ -58,6 +57,12 @@ public class JavaQuestionController {
     @ExceptionHandler(QuestionAlreadyAddedException.class)
     public String employeeAlreadyAddedExceptionHandler(QuestionAlreadyAddedException e) {
         return "Уже добавлен \""+ e.getQuestion() + "\"";
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BlankQuestionOrAnswerException.class)
+    public String blankQuestionOrAnswerExceptionHandler(BlankQuestionOrAnswerException e) {
+        return "Добавьте вопрос и ответ";
     }
 
 
